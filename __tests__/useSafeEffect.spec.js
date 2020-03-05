@@ -170,3 +170,19 @@ test("checkEffectValidity acts as an identity when effect is valid", () => {
   jest.runAllTimers();
   expect(done).toHaveBeenCalledWith(initialId);
 });
+
+test("should invoke cleanup function", () => {
+  const clean = jest.fn();
+
+  const { unmount } = renderHook(
+    ({ id }) => {
+      useSafeEffect(() => {
+        return clean;
+      }, []);
+    },
+    { initialProps: {} }
+  );
+
+  unmount();
+  expect(clean).toHaveBeenCalledTimes(1);
+});

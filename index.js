@@ -25,13 +25,17 @@ const useSafeEffect = (effect, deps) => {
       }
     };
 
-    effect({
+    const cleanup = effect({
       checkEffectValidity,
       isInvalidEffectError,
       handleEffectError
     });
     return () => {
       valid = false;
+
+      if (typeof cleanup === "function") {
+        cleanup();
+      }
     };
   }, deps);
 };
